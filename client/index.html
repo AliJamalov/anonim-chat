@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Anonymous Chat</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>HeckimMen</h1>
+    <div id="chat">
+      <div id="messages"></div>
+      <input id="messageInput" placeholder="Type your message..." />
+      <button id="sendBtn">Send</button>
+    </div>
+
+    <script>
+      const ws = new WebSocket("ws://localhost:8080");
+
+      ws.onopen = () => {
+        console.log("Connected to server");
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.method === "message") {
+          const messagesContainer = document.getElementById("messages");
+          const messageElement = document.createElement("div");
+          messageElement.classList.add("message", "received");
+          messageElement.textContent = data.message;
+
+          messagesContainer.appendChild(messageElement);
+          messagesContainer.scrollTop = messagesContainer.scrollHeight; // Автопрокрутка вниз
+        } else if (data.method === "matched") {
+          console.log("You are now connected to a stranger!");
+        } else if (data.method === "disconnected") {
+          const messagesContainer = document.getElementById("messages");
+          const messageElement = document.createElement("div");
+          messageElement.classList.add("message", "received");
+          messageElement.textContent = data.message;
+
+          messagesContainer.appendChild(messageElement);
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+      };
+
+      document.getElementById("sendBtn").addEventListener("click", () => {
+        const messageInput = document.getElementById("messageInput");
+        const message = messageInput.value;
+
+        if (message.trim() === "") return;
+
+        // Добавляем сообщение в чат с классом "sent"
+        const messagesContainer = document.getElementById("messages");
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message", "sent");
+        messageElement.textContent = message;
+
+        messagesContainer.appendChild(messageElement);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Отправляем сообщение серверу
+        ws.send(JSON.stringify({ text: message }));
+
+        messageInput.value = "";
+      });
+    </script>
+  </body>
+</html>
