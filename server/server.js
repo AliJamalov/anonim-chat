@@ -1,12 +1,18 @@
 const WebSocket = require("ws");
 const http = require("http");
 
+// Определяем порт сервера
+const PORT = process.argv[2] || 8080;
+
 // Создаем HTTP-сервер и WebSocket-сервер
-const httpServer = http.createServer();
+const httpServer = http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("WebSocket server is running\n");
+});
 const wss = new WebSocket.Server({ server: httpServer });
 
-httpServer.listen(8080, () => {
-  console.log("Server is running on ws://localhost:8080");
+httpServer.listen(PORT, () => {
+  console.log(`Server is running on ws://localhost:${PORT}`);
 });
 
 // Хранилища для клиентов и пар
