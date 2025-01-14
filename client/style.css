@@ -13,70 +13,60 @@
 body {
   height: 100vh;
   display: flex;
-  align-items: center;
   flex-direction: column;
-  justify-content: center;
   background: linear-gradient(135deg, #12bdac, #0984e3);
   font-family: "Arial", sans-serif;
   color: #333;
 }
 
-h1 {
-  margin-bottom: 15px;
+#chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.main-text {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }
 
 .input-box {
   display: flex;
-  gap: 15px;
   align-items: center;
-}
-
-#chat {
-  width: 100%;
-  max-width: 500px;
-  height: 90%;
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  padding: 15px;
+  gap: 15px;
+  padding: 10px;
 }
 
 #chatHeader {
-  height: 50px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #0984e3;
   color: white;
   padding: 0 15px;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-#chatHeader .settings {
   font-size: 1.5rem;
-  cursor: pointer;
+  font-weight: bold;
 }
 
 #messages {
   flex: 1;
   overflow-y: auto;
-  padding: 10px;
+  padding: 15px;
   background-color: #f4f6f8;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  border-radius: 6px;
+  gap: 15px;
+  border-radius: 0;
 }
 
 .message {
-  max-width: 75%;
-  padding: 10px 15px;
-  border-radius: 15px;
-  font-size: 1rem;
+  max-width: 85%;
+  padding: 15px 20px;
+  border-radius: 20px;
+  font-size: 1.2rem;
   word-wrap: break-word;
 }
 
@@ -99,7 +89,7 @@ h1 {
 #messageInputContainer {
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 15px;
   background-color: #ffffff;
   border-top: 1px solid #ddd;
 }
@@ -107,9 +97,9 @@ h1 {
 #messageInput {
   flex: 1;
   border: 1px solid #ccc;
-  border-radius: 20px;
-  padding: 10px 15px;
-  font-size: 1rem;
+  border-radius: 25px;
+  padding: 15px 20px;
+  font-size: 1.2rem;
   outline: none;
   transition: border-color 0.3s;
 }
@@ -119,10 +109,10 @@ h1 {
 }
 
 button {
-  margin-left: 10px;
+  margin-left: 15px;
   background: linear-gradient(135deg, #0984e3, #12bdac);
   border: none;
-  border-radius: 6px;
+  border-radius: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -130,7 +120,7 @@ button {
   font-size: 1.5rem;
   cursor: pointer;
   transition: background 0.3s, transform 0.2s;
-  padding: 10px 17px;
+  padding: 15px 25px;
 }
 
 button:hover {
@@ -144,27 +134,30 @@ button:active {
 
 /* Адаптивность */
 @media (max-width: 600px) {
-  #chat {
-    height: 100%;
-    border-radius: 0;
-  }
-
   #chatHeader {
-    font-size: 1rem;
+    font-size: 1.2rem;
+    height: 55px;
+    padding: 0 10px;
   }
 
   #messages {
     padding: 10px;
-    font-size: 0.9rem;
+    gap: 10px;
+    font-size: 1rem;
+  }
+
+  .message {
+    padding: 12px 15px;
+    font-size: 1rem;
   }
 
   button {
-    width: 40px;
-    height: 40px;
     font-size: 1.2rem;
+    padding: 10px 20px;
   }
 
   #messageInput {
-    font-size: 0.9rem;
+    padding: 10px 15px;
+    font-size: 1rem;
   }
 }
