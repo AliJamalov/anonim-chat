@@ -1,18 +1,55 @@
 const WebSocket = require("ws");
 const http = require("http");
+const fs = require("fs");
+const path = require("path");
 
 // Определяем порт сервера
 const PORT = process.argv[2] || 8080;
 
-// Создаем HTTP-сервер и WebSocket-сервер
+// Создаем HTTP-сервер
 const httpServer = http.createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("WebSocket server is running\n");
+  // Определяем путь к запрашиваемому файлу
+  const filePath =
+    req.url === "/"
+      ? path.join(__dirname, "../client/index.html")
+      : path.join(__dirname, "../client", req.url);
+
+  // Определяем тип содержимого
+  const extname = path.extname(filePath);
+  const contentType =
+    {
+      ".html": "text/html",
+      ".css": "text/css",
+      ".js": "application/javascript",
+      ".json": "application/json",
+      ".png": "image/png",
+      ".jpg": "image/jpeg",
+      ".svg": "image/svg+xml",
+      ".ico": "image/x-icon",
+    }[extname] || "application/octet-stream";
+
+  // Читаем файл и отправляем его содержимое
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      if (err.code === "ENOENT") {
+        res.writeHead(404, { "Content-Type": "text/plain" });
+        res.end("404 Not Found");
+      } else {
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end("500 Internal Server Error");
+      }
+    } else {
+      res.writeHead(200, { "Content-Type": contentType });
+      res.end(data);
+    }
+  });
 });
+
+// Создаем WebSocket-сервер поверх HTTP
 const wss = new WebSocket.Server({ server: httpServer });
 
 httpServer.listen(PORT, () => {
-  console.log(`Server is running on ws://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 // Хранилища для клиентов и пар
