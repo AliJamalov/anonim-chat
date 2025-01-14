@@ -49,7 +49,7 @@ const httpServer = http.createServer((req, res) => {
 const wss = new WebSocket.Server({ server: httpServer });
 
 httpServer.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on https://anonim-chat-fmg0.onrender.com`);
 });
 
 // Хранилища для клиентов и пар
