@@ -71,6 +71,16 @@ wss.on("connection", (ws) => {
 
   matchClient(clientId);
 
+  // Уведомляем клиента, если никто не присоединился
+  if (!pairs[clientId]) {
+    ws.send(
+      JSON.stringify({
+        method: "waiting",
+        message: "Waiting for a stranger to join...",
+      })
+    );
+  }
+
   // Обработка сообщений от клиента
   ws.on("message", (message) => {
     handleMessage(clientId, message);
@@ -98,8 +108,23 @@ function matchClient(clientId) {
   pairs[otherClientId] = clientId;
 
   // Уведомляем клиентов, что пара найдена
-  clientConnections[clientId].send(JSON.stringify({ method: "matched" }));
-  clientConnections[otherClientId].send(JSON.stringify({ method: "matched" }));
+  clientConnections[clientId].send(
+    JSON.stringify({
+      method: "matched",
+      message: "You are now connected to a stranger!",
+    })
+  );
+  clientConnections[otherClientId].send(
+    JSON.stringify({
+      method: "matched",
+      message: "You are now connected to a stranger!",
+    })
+  );
+
+  // Уведомляем об успешном подключении
+  console.log(
+    `Client ${clientId} and Client ${otherClientId} are now connected.`
+  );
 }
 
 // Обработка сообщений от клиентов

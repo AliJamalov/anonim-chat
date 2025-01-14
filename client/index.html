@@ -11,7 +11,6 @@
       <input id="messageInput" placeholder="Type your message..." />
       <button id="sendBtn">Send</button>
     </div>
-
     <script>
       const ws = new WebSocket("ws://localhost:8080");
 
@@ -22,25 +21,33 @@
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
 
-        if (data.method === "message") {
-          const messagesContainer = document.getElementById("messages");
-          const messageElement = document.createElement("div");
-          messageElement.classList.add("message", "received");
-          messageElement.textContent = data.message;
+        const messagesContainer = document.getElementById("messages");
+        const messageElement = document.createElement("div");
 
+        if (data.method === "waiting") {
+          // Отображаем сообщение ожидания
+          messageElement.classList.add("message", "system");
+          messageElement.textContent = data.message;
           messagesContainer.appendChild(messageElement);
-          messagesContainer.scrollTop = messagesContainer.scrollHeight; // Автопрокрутка вниз
         } else if (data.method === "matched") {
-          console.log("You are now connected to a stranger!");
-        } else if (data.method === "disconnected") {
-          const messagesContainer = document.getElementById("messages");
-          const messageElement = document.createElement("div");
-          messageElement.classList.add("message", "received");
+          // Уведомляем, что клиент подключен
+          messageElement.classList.add("message", "system");
           messageElement.textContent = data.message;
-
           messagesContainer.appendChild(messageElement);
-          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        } else if (data.method === "message") {
+          // Отображаем сообщение от собеседника
+          messageElement.classList.add("message", "received");
+          messageElement.textContent = `Stranger: ${data.message}`;
+          messagesContainer.appendChild(messageElement);
+        } else if (data.method === "disconnected") {
+          // Уведомляем о разрыве соединения
+          messageElement.classList.add("message", "system");
+          messageElement.textContent = data.message;
+          messagesContainer.appendChild(messageElement);
         }
+
+        // Автопрокрутка вниз
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
       };
 
       document.getElementById("sendBtn").addEventListener("click", () => {
@@ -53,7 +60,7 @@
         const messagesContainer = document.getElementById("messages");
         const messageElement = document.createElement("div");
         messageElement.classList.add("message", "sent");
-        messageElement.textContent = message;
+        messageElement.textContent = `You: ${message}`;
 
         messagesContainer.appendChild(messageElement);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
