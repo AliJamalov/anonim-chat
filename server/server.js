@@ -76,7 +76,7 @@ wss.on("connection", (ws) => {
     ws.send(
       JSON.stringify({
         method: "waiting",
-        message: "Waiting for a stranger to join...",
+        message: "Ожидание подключения другого пользователя...",
       })
     );
   }
@@ -111,13 +111,13 @@ function matchClient(clientId) {
   clientConnections[clientId].send(
     JSON.stringify({
       method: "matched",
-      message: "You are now connected to a stranger!",
+      message: "Вы подключены к собеседнику!",
     })
   );
   clientConnections[otherClientId].send(
     JSON.stringify({
       method: "matched",
-      message: "You are now connected to a stranger!",
+      message: "Вы подключены к собеседнику!",
     })
   );
 
@@ -132,7 +132,10 @@ function handleMessage(clientId, message) {
   const otherClientId = pairs[clientId];
   if (!otherClientId) {
     clientConnections[clientId].send(
-      JSON.stringify({ error: "No match yet. Please wait for a stranger." })
+      JSON.stringify({
+        error:
+          "Пара пока не найдена. Пожалуйста, подождите подключения другого пользователя.",
+      })
     );
     return;
   }
@@ -152,7 +155,7 @@ function handleDisconnection(clientId) {
     clientConnections[otherClientId].send(
       JSON.stringify({
         method: "disconnected",
-        message: "Stranger has left the chat.",
+        message: "Собеседник покинул чат.",
       })
     );
     delete pairs[otherClientId];
