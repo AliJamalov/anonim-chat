@@ -12,17 +12,27 @@
 
 body {
   height: 100vh;
+  overflow: hidden; /* Убирает прокрутку */
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, #12bdac, #0984e3);
   font-family: "Arial", sans-serif;
   color: #333;
+  margin: 0;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden; /* Убирает горизонтальную прокрутку */
 }
 
 #chat {
   flex: 1;
   display: flex;
   flex-direction: column;
+  width: 100%; /* Гарантирует, что контейнер не шире экрана */
+  height: 100%; /* Заполняет всю доступную высоту */
   background-color: #ffffff;
 }
 
@@ -55,16 +65,12 @@ body {
 
 #messages {
   flex: 1;
-  overflow-y: auto;
-  padding: 25px;
-  background-image: url("/../bg-2.jpg");
-  background-repeat: no-repeat;
-  background-size: cover; /* Изображение заполняет весь элемент */
-  background-position: center; /* Центрирует изображение */
+  overflow-y: auto; /* Только вертикальная прокрутка для сообщений */
+  padding: 20px;
+  background-color: #f4f6f8;
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  border-radius: 0;
+  gap: 20px;
 }
 
 .message {
